@@ -50,7 +50,7 @@ def on_mouse_motion(event, index, table_height):
             content_width = total_width
             main_canvas.configure(scrollregion=main_canvas.bbox("all"))
             h_canvas.configure(scrollregion=(0, 0, content_width, table_height))
-            hsb.set(0, total_width)
+            #hsb.set(0, total_width)
     
 def setup_columns(root,window,column_headers, column_widths, table_height, frame_height, column_height, header_height,table_color_map=None, xpad=None, ypad=None, header_font=None, grid_row=None):
    
@@ -134,12 +134,12 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
         grid_row=0
     frame=tk.Frame(window, width=frame_width, height=frame_height, background=tree_background, bd=0, highlightthickness=0, border=None)
     frame.grid(row=grid_row, column=0, sticky='nsew', padx=xpad,pady=ypad)
-    frame.grid_propagate(False)
+    #frame.grid_propagate(False)
     frame.columnconfigure(0,weight=1)
     frame_columns = tk.Frame(frame, background=tree_erase_background, bd=0, highlightthickness=0, border=None)
     frame_columns.grid(row=0, column=0, sticky='nesw')
     frame_columns.columnconfigure(0, weight=1)
-    frame_columns.propagate(False)
+    #frame_columns.propagate(False)
 
     columns=len(column_headers)
     column_data = [[] for _ in range(columns)]
@@ -152,10 +152,11 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
     table_width=sum(column_widths)
     main_canvas = tk.Canvas(frame_columns, height=table_height, width=table_width, background=tree_background, bd=0, highlightthickness=0)
 
-    vsb = ttk.Scrollbar(frame, orient="vertical", command=main_canvas.yview)
-    main_canvas.configure(yscrollcommand=vsb.set)
+    # removing vertical and horizontal scroll bars to reimplement
+    #vsb = ttk.Scrollbar(frame, orient="vertical", command=main_canvas.yview) 
+    #main_canvas.configure(yscrollcommand=vsb.set)
     main_canvas.grid(row=1, column=0, sticky='nsew', columnspan=1000)
-    vsb.grid(row=0, column=1000, sticky='nsw', rowspan=1000, pady=(header_height,15))
+    #vsb.grid(row=0, column=1000, sticky='nsw', rowspan=1000, pady=(header_height,15))
 
     # Create a table frame to hold the data
     table_frame = tk.Frame(main_canvas, background=tree_erase_background)
@@ -168,10 +169,10 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
     header_frame = tk.Frame(h_canvas, background=tree_erase_background, bd=0, highlightthickness=0, border=None)
     h_canvas.create_window((0, 0), window=header_frame, anchor='nw')
 
-    hsb = ttk.Scrollbar(frame, orient="horizontal")
-    main_canvas.configure(xscrollcommand=hsb.set)
-    h_canvas.configure(xscrollcommand=hsb.set)
-    hsb.grid(row=2, column=0, sticky='sew', columnspan=3, padx=(0,0))
+    #hsb = ttk.Scrollbar(frame, orient="horizontal")
+    #main_canvas.configure(xscrollcommand=hsb.set)
+    #h_canvas.configure(xscrollcommand=hsb.set)
+    #hsb.grid(row=2, column=0, sticky='sew', columnspan=3, padx=(0,0))
 
     # Create headers
     for i, item in enumerate(column_headers):
@@ -230,7 +231,7 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
         for widget in (main_canvas, h_canvas):
             widget.xview(*args)
 
-    hsb.config(command=on_scroll)
+    #hsb.config(command=on_scroll)
 
     def resize_window(event):
         new_width_list=[]
@@ -258,7 +259,8 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
             h_canvas.configure(width=table_width)
             frame.configure(width=new_width, height=new_height+110)
             
-    root.bind("<Configure>", resize_window)
+    # has weird interaction with I think things that I did to warning frame, so removing
+    # root.bind("<Configure>", resize_window) 
     
     def on_mouse_scroll(event):
         scroll_units = .05  # Adjust the scrolling speed as needed
@@ -429,8 +431,9 @@ def insert_item(column, text, bind=None, font=None):
     canvas.create_window(0, row * 25, window=frame, anchor='nw')
     label = tk.Label(frame, text=" "+str(text), anchor='w',  foreground=item_foreground,background=tree_background, font=font)
     label.pack(fill='both', expand=True, padx=0)  
-    label.bind('<ButtonRelease-1>', highlight_row)
-    label.bind("<Double-1>",lambda event, bind=bind: on_double(event, bind))
+    # removing following two lines because I don't want the highlights to be removed when clicking around on table
+    # label.bind('<ButtonRelease-1>', highlight_row)
+    # label.bind("<Double-1>",lambda event, bind=bind: on_double(event, bind))
     clear_canvas.append(canvas)
     item_width = label.winfo_reqwidth()
     max_item_widths[column] = item_width
