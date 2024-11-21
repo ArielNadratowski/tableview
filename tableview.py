@@ -147,7 +147,8 @@ def setup_columns(root,window,column_headers, column_widths, table_height, frame
     max_item_widths = [0] * columns  # Initialize max_item_widths list
     row_indices = [0] * columns  # Initialize row indices for each column
     #table height is the visual viewport height, column height is the inside-viewport height (scrollable height)
-    table_height = table_height * 10
+    # table_height will be set the same as column height (which is the entire size of the frame) due to disableing scrolling
+    #table_height = table_height * 10
 
     table_width=sum(column_widths)
     main_canvas = tk.Canvas(frame_columns, height=table_height, width=table_width, background=tree_background, bd=0, highlightthickness=0)
